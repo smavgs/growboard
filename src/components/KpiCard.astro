@@ -1,0 +1,11 @@
+---
+import Sparkline from './Sparkline.astro';
+const { label, value, sub = '', icon = '✦', change = '', tone = 'positive' } = Astro.props;
+---
+<div class="kpi">
+  <div class="kpi-head"><span class="kpi-label">{label}</span><span class="kpi-icon">{icon}</span></div>
+  <div class="kpi-value">{value}</div>
+  {sub && <div class="kpi-sub">{sub}</div>}
+  <Sparkline color={tone === 'warning' ? '#f59e0b' : tone === 'danger' ? '#ef4444' : '#6f4cff'} />
+  {change && <div class={`small ${tone}`}>{change}</div>}
+</div>

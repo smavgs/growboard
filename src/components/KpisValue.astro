@@ -1,0 +1,20 @@
+---
+import KpiCard from './KpiCard.astro';
+import { kpis, improvementPortfolio } from '../data/demo';
+---
+<div class="grid g6">
+  <KpiCard label="Saleable Yield / m²" value="1.72 kg" icon="❋" change="↑ 11.2% vs baseline" />
+  <KpiCard label="First-Pass Acceptance" value="94.6%" icon="☑" change="↑ 6.1 pp vs baseline" />
+  <KpiCard label="Room Turnaround" value="5.3 days" icon="◔" change="↓ 1.1 days vs baseline" />
+  <KpiCard label="Energy Intensity" value="0.68 kWh/g" icon="⚡" change="↓ 12.7% vs baseline" />
+  <KpiCard label="Verified Benefit" value="$186.4K" icon="$" change="↑ $48.7K vs baseline" />
+  <KpiCard label="Verified ROI" value="218%" icon="◎" change="↑ 64 pp vs baseline" />
+</div>
+<div class="split">
+  <div class="panel"><div class="panel-head"><h2 class="panel-title">Saleable Yield / m²</h2><div class="context"><button class="tab active" data-tab>Daily</button><button class="tab" data-tab>Weekly</button><button class="tab" data-tab>Monthly</button></div></div><svg class="chart" viewBox="0 0 700 250" preserveAspectRatio="none"><g class="line-grid">{[40,80,120,160,200].map(y=><line x1="35" x2="675" y1={y} y2={y}/>)}</g><path d="M35 190 C95 170,140 156,185 160 S255 145,310 138 S390 120,450 125 S540 105,640 76 L640 220 L35 220 Z" fill="rgba(111,76,255,.10)"/><path d="M35 190 C95 170,140 156,185 160 S255 145,310 138 S390 120,450 125 S540 105,640 76" fill="none" stroke="#6f4cff" stroke-width="3"/><path d="M35 205 C95 190,140 180,185 175 S255 166,310 158 S390 150,450 144 S540 132,640 120" fill="none" stroke="#a8b5da" stroke-dasharray="5 5" stroke-width="2"/></svg><div class="small positive">↑ 11.2% improvement vs baseline</div></div>
+  <div class="panel"><div class="panel-head"><h2 class="panel-title">Improvement Portfolio</h2><button class="link" data-drawer-title="Improvement Portfolio">View all</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Initiative</th><th>Baseline</th><th>Current</th><th>Improvement</th><th>Value</th></tr></thead><tbody>{improvementPortfolio.map(r=><tr><td><b>{r[0]}</b><div class="row-sub">{r[1]}</div></td><td>{r[2]}</td><td>{r[3]}</td><td class="positive">{r[4]}</td><td><b>{r[5]}</b></td></tr>)}</tbody></table></div><div class="row-between" style="margin-top:10px"><span class="link">Total Verified Value</span><b>$158.4K</b></div></div>
+</div>
+<div class="grid g2">
+  <div class="panel"><h2 class="panel-title">KPIs Overview</h2><div class="table-wrap" style="margin-top:10px"><table class="table"><thead><tr><th>KPI</th><th>Current</th><th>Baseline</th><th>Change</th><th>Target</th><th>Status</th></tr></thead><tbody>{kpis.map(k=><tr><td><b>{k.name}</b></td><td>{k.current}</td><td>{k.baseline}</td><td class="positive">{k.change}</td><td>{k.target}</td><td><span class="status green">{k.status}</span></td></tr>)}</tbody></table></div></div>
+  <div class="panel"><div class="panel-head"><h2 class="panel-title">Verified Value</h2><span class="pill">Last 30 days</span></div><div class="metric-grid" style="margin-top:12px"><div class="metric"><div class="metric-label">Incremental Contribution</div><div class="metric-value">$246.1K</div></div><div class="metric"><div class="metric-label">Avoided Cost</div><div class="metric-value">$52.3K</div></div><div class="metric"><div class="metric-label">Program Cost</div><div class="metric-value">$32.0K</div></div><div class="metric"><div class="metric-label">Net Benefit</div><div class="metric-value">$266.4K</div></div><div class="metric"><div class="metric-label">Verified ROI</div><div class="metric-value" style="color:var(--purple)">218%</div></div></div><svg class="chart-short" viewBox="0 0 420 150" preserveAspectRatio="none"><rect x="20" y="80" width="40" height="60" fill="#cbd5e1"/><rect x="85" y="50" width="40" height="90" fill="#22c55e"/><rect x="145" y="35" width="40" height="105" fill="#22c55e"/><rect x="205" y="25" width="40" height="115" fill="#22c55e"/><rect x="265" y="18" width="40" height="122" fill="#22c55e"/><rect x="325" y="100" width="40" height="40" fill="#f472b6"/><rect x="380" y="0" width="40" height="140" fill="#6f4cff"/></svg></div>
+</div>

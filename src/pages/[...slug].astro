@@ -1,0 +1,40 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import GenericPage from '../components/GenericPage.astro';
+import RoomPage from '../components/RoomPage.astro';
+import KpisValue from '../components/KpisValue.astro';
+import AttentionBoard from '../components/AttentionBoard';
+import BatchBoard from '../components/BatchBoard';
+import { pageDefinitions } from '../data/pages';
+
+export function getStaticPaths() {
+  const standard = pageDefinitions.map(page => ({ params: { slug: page.route }, props: { route: page.route, page } }));
+  return [
+    ...standard,
+    { params: { slug: 'attention' }, props: { route: 'attention' } },
+    { params: { slug: 'rooms' }, props: { route: 'rooms' } },
+    { params: { slug: 'room/flower-04' }, props: { route: 'room/flower-04' } },
+    { params: { slug: 'batches' }, props: { route: 'batches' } },
+    { params: { slug: 'batch/BCH-FLW-2024-073' }, props: { route: 'batch/BCH-FLW-2024-073' } },
+    { params: { slug: 'kpis' }, props: { route: 'kpis' } }
+  ];
+}
+const { route, page } = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const rooms=[
+  ['Flower 04','Flower W6','B-260814-07','Cultivar X','39','486','Healthy','Normal','2','118.4 kg'],
+  ['Flower 02','Flower W5','B-260814-05','Blue Dream','34','502','Attention','Excursion','4','104.0 kg'],
+  ['Veg 01','Vegetative','B-260814-02','Tropicana','17','1,280','Healthy','Normal','0','—'],
+  ['Dry 01','Drying','BCH-DRY-2024-041','GMO','3','—','Processing','Normal','1','1,024 kg']
+];
+---
+{route === 'attention' ? <AppShell title="Attention" eyebrow="Command / Attention" activeRoute="attention" tabs={[]}><AttentionBoard client:load /></AppShell> :
+route === 'rooms' ? <AppShell title="Rooms" eyebrow="Cultivation / Rooms" activeRoute="rooms" tabs={['Table','Cards','Facility Map']}>
+  <div class="grid g4"><div class="kpi"><div class="kpi-label">Active Rooms</div><div class="kpi-value">12</div><div class="kpi-sub">of 14</div></div><div class="kpi"><div class="kpi-label">Healthy Rooms</div><div class="kpi-value">9</div><div class="small positive">Stable</div></div><div class="kpi"><div class="kpi-label">Watch</div><div class="kpi-value">2</div><div class="small warning">Review</div></div><div class="kpi"><div class="kpi-label">Attention</div><div class="kpi-value">1</div><div class="small danger">Immediate</div></div></div>
+  <div class="panel"><div class="panel-head"><h2 class="panel-title">Rooms</h2><div class="context"><button class="pill" data-demo-action="Stage filter opened">Stage ▾</button><button class="pill" data-demo-action="Status filter opened">Status ▾</button></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Room</th><th>Stage</th><th>Batch</th><th>Cultivar</th><th>Day</th><th>Plants</th><th>Crop state</th><th>Environment</th><th>Attention</th><th>Forecast</th></tr></thead><tbody>{rooms.map(r=><tr><td><a class="link" href={`${base}room/flower-04/`}>{r[0]}</a></td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td><td>{r[4]}</td><td>{r[5]}</td><td><span class={`status ${r[6]==='Healthy'?'green':r[6]==='Attention'?'red':'blue'}`}>{r[6]}</span></td><td>{r[7]}</td><td>{r[8]}</td><td>{r[9]}</td></tr>)}</tbody></table></div></div>
+</AppShell> :
+route === 'room/flower-04' ? <AppShell title="Flower 04" eyebrow="Cultivation / Rooms / Flower 04" activeRoute="rooms" tabs={['Overview','Crop','Environment','Cameras','Equipment','Events','History']}><RoomPage /></AppShell> :
+route === 'batches' ? <AppShell title="Batches" eyebrow="Cultivation / Batches" activeRoute="batches" tabs={['Board','Table','Calendar']}><BatchBoard client:load /></AppShell> :
+route === 'batch/BCH-FLW-2024-073' ? <AppShell title="Batch BCH-FLW-2024-073" eyebrow="Cultivation / Batches / Batch Profile" activeRoute="batches" tabs={['Overview','Events','Quality','Forecast','Evidence']}><GenericPage page={{route,title:'Batch BCH-FLW-2024-073',eyebrow:'',description:'Full batch profile including stage history, interventions, quality state, forecast and linked evidence.',tabs:[],kpis:[['Day in stage','28','of 63'],['Plants','1,280','current'],['Forecast','43.7 kg','±4.2 kg'],['Quality score','86','Good']],primaryTitle:'Batch Events',primaryRows:[['Nutrient recipe updated','Flower Room 01','Complete','Today'],['Lab result in range','QC Lab','Complete','Today'],['Irrigation completed','Flower Room 01','Complete','Yesterday'],['Light intensity adjusted','Flower Room 01','In Review','Yesterday']],secondaryTitle:'Batch State',secondaryItems:[['Stage','Flower'],['Progress','44%'],['Estimated harvest','May 28, 2024'],['Forecast confidence','82%']]}} /></AppShell> :
+route === 'kpis' ? <AppShell title="KPIs / Verified Value" eyebrow="Performance / KPIs" activeRoute="kpis" tabs={['Yield','Quality','Throughput','Resources','Financial']}><KpisValue /></AppShell> :
+page ? <AppShell title={page.title} eyebrow={page.eyebrow} activeRoute={route} tabs={page.tabs}><GenericPage page={page} /></AppShell> : null}

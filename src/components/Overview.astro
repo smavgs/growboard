@@ -1,0 +1,39 @@
+---
+import KpiCard from './KpiCard.astro';
+import { roomStatus, today, intelligence, improvements } from '../data/demo';
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+<div class="grid g6">
+  <KpiCard label="Active Rooms" value="12" sub="of 14" icon="▣" change="↑ 2 vs last 7 days" />
+  <KpiCard label="Active Batches" value="8" sub="of 10" icon="◫" change="No material change" />
+  <KpiCard label="Attention Items" value="12" icon="△" change="↑ 4 vs last 7 days" tone="warning" />
+  <KpiCard label="Forecast Output" value="48.6 kg" icon="↗" change="↑ 8.3 kg vs last 7 days" />
+  <KpiCard label="Verified Benefit" value="$124.7K" icon="$" change="↑ $18.4K vs last 7 days" />
+  <KpiCard label="System Health" value="96%" icon="☑" change="Healthy" />
+</div>
+<div class="three">
+  <div class="panel">
+    <div class="panel-head"><h2 class="panel-title">Today</h2><a class="link" href={`${base}attention/`}>View all</a></div>
+    <div class="list" style="margin-top:12px">{today.map(item=><div class="list-row"><div class="list-main"><div class="list-icon">•</div><div><div class="row-title">{item.title}</div><div class="row-sub">{item.desc}</div></div></div><div style="text-align:right"><span class={`status ${item.priority==='High'?'red':item.priority==='Medium'?'orange':'blue'}`}>{item.priority}</span><div class="row-sub" style="margin-top:5px">{item.age}</div></div></div>)}</div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2 class="panel-title">Facility Performance</h2><div><button class="pill">Output (kg) ▾</button></div></div>
+    <svg class="chart" viewBox="0 0 700 250" preserveAspectRatio="none" aria-label="Facility output trend">
+      <g class="line-grid">{[40,80,120,160,200].map(y=><line x1="35" x2="675" y1={y} y2={y}/>)}</g>
+      <path d="M35 190 C95 160,120 48,180 90 S260 200,320 145 S410 100,470 110 S580 120,640 55 L640 220 L35 220 Z" fill="rgba(111,76,255,.10)"/>
+      <path d="M35 190 C95 160,120 48,180 90 S260 200,320 145 S410 100,470 110 S580 120,640 55" fill="none" stroke="#6f4cff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M35 180 C100 150,120 60,180 90 S260 180,320 150 S410 110,470 120 S570 90,640 70" fill="none" stroke="#9eb1df" stroke-dasharray="5 5" stroke-width="2"/>
+      {['May 8','May 9','May 10','May 11','May 12','May 13'].map((t,i)=><text class="chart-label" x={55+i*108} y="242">{t}</text>)}
+    </svg>
+    <a class="link" href={`${base}kpis/`}>View performance dashboard →</a>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2 class="panel-title">Room Status</h2><a class="link" href={`${base}rooms/`}>View all</a></div>
+    <div class="table-wrap"><table class="table"><thead><tr><th>Room</th><th>Crop</th><th>Status</th><th>VPD</th><th>Temp</th></tr></thead><tbody>{roomStatus.map(r=><tr><td><a class="link" href={`${base}room/flower-04/`}>{r.name}</a></td><td>{r.crop}</td><td><span class={`status ${r.status==='Healthy'?'green':r.status==='Attention'?'red':r.status==='Watch'?'orange':'blue'}`}>{r.status}</span></td><td>{r.vpd}</td><td>{r.temp}</td></tr>)}</tbody></table></div>
+  </div>
+</div>
+<div class="grid g3">
+  <div class="panel"><div class="panel-head"><h2 class="panel-title">Latest Intelligence</h2><a class="link" href={`${base}insights/`}>View all</a></div><div class="list" style="margin-top:12px">{intelligence.map(item=><button class="list-row" data-drawer-title={item.title} style="text-align:left"><div class="list-main"><div class="list-icon">✧</div><div><div class="row-title">{item.title}</div><div class="row-sub">{item.text}</div><span class="status purple" style="margin-top:6px">{item.category}</span></div></div><div class="row-sub">{item.age}</div></button>)}</div></div>
+  <div class="panel"><div class="panel-head"><h2 class="panel-title">Improvement Portfolio</h2><a class="link" href={`${base}verified-benefit/`}>View value</a></div><div class="grid g2" style="margin-top:12px">{improvements.map(item=><button class="metric" data-drawer-title={item.title} style="text-align:left"><div class="metric-label">{item.sub}</div><div class="row-title" style="margin-top:4px">{item.title}</div><div class="metric-value">{item.value}</div><div class="small muted">Verified Benefit</div></button>)}</div></div>
+  <div class="panel"><div class="panel-head"><h2 class="panel-title">Recent Activity</h2><a class="link" href={`${base}timeline/`}>View timeline</a></div><div class="timeline" style="margin-top:12px">{['Batch FLW-2024-073 moved to Dry 01','QC test completed: FLW-2024-071','HVAC maintenance completed in Veg 01','Recipe update published','Daily forecast generated'].map((x,i)=><div class="time-row"><div class="dot"></div><div><div class="row-title">{x}</div><div class="row-sub">by {['Sarah M.','Lab System','Maintenance Team','Alex M.','CVAi Intelligence'][i]}</div></div><div class="row-sub">{['18m','1h','2h','3h','4h'][i]}</div></div>)}</div></div>
+</div>

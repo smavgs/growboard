@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import { navigation } from '../data/navigation';
+const { title, eyebrow, activeRoute, tabs = [] } = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const hrefFor = (route:string) => route === 'overview' ? base : `${base}${route}/`;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="description" content="CVAi Growboard manufacturer operating intelligence prototype" />
+  <meta name="theme-color" content="#6f4cff" />
+  <title>{title} · CVAi Growboard</title>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href={base}>
+        <div class="brand-mark">✦</div>
+        <div><div class="brand-name">CVAi Growboard</div><div class="brand-sub">Manufacturer Intelligence</div></div>
+      </a>
+      {navigation.map(section => <div class="nav-section">
+        <div class="nav-label">{section.label}</div>
+        {section.items.map(item => <a class={`nav-item ${activeRoute === item.route ? 'active' : ''}`} href={hrefFor(item.route)}>
+          <span class="nav-left"><span class="nav-icon">{item.icon}</span><span>{item.label}</span></span>{item.badge && <span class="badge">{item.badge}</span>}
+        </a>)}
+      </div>)}
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="top-left">
+          <div><div class="eyebrow">{eyebrow}</div><h1 class="page-title">{title}</h1></div>
+          <div class="context"><button class="pill">▧ CVAi Demonstration Facility ▾</button><span class="pill demo-pill">Demo Data</span></div>
+        </div>
+        <div class="top-actions">
+          <button class="pill" data-demo-action="Date range changed">Last 30 days ▾</button>
+          <button class="icon-btn" data-demo-action="Growboard refreshed">↻</button>
+          <button class="icon-btn" data-demo-action="Notifications opened">◔</button>
+          <button class="icon-btn" data-demo-action="Help opened">?</button>
+          <button class="avatar" data-demo-action="Profile opened">AM</button>
+        </div>
+      </header>
+      {tabs.length > 0 && <nav class="subnav" aria-label="Page views">{tabs.map((tab:string, index:number)=><button class={`tab ${index===0?'active':''}`} data-tab>{tab}</button>)}</nav>}
+      <section class="content"><slot /></section>
+      <footer class="statusbar">
+        <div class="status-box"><div class="status-label">Data freshness</div><div class="status-value positive">4m ago</div></div>
+        <div class="status-box"><div class="status-label">Weather</div><div class="status-value">72°F · Sunny</div></div>
+        <div class="status-box"><div class="status-label">CO₂ level</div><div class="status-value">812 ppm</div></div>
+        <div class="status-box"><div class="status-label">Facility load</div><div class="status-value">68%</div></div>
+        <div class="status-box"><div class="status-label">Active users</div><div class="status-value">6 online</div></div>
+      </footer>
+    </main>
+  </div>
+  <aside class="drawer" id="globalDrawer"><button class="drawer-close" data-close-drawer>×</button><div id="drawerContent"></div></aside>
+  <div class="toast" id="globalToast"></div>
+  <script is:inline>
+    const toast = document.getElementById('globalToast');
+    const drawer = document.getElementById('globalDrawer');
+    const drawerContent = document.getElementById('drawerContent');
+    let timer;
+    const showToast = (message) => { if (!toast) return; toast.textContent = message; toast.classList.add('show'); clearTimeout(timer); timer=setTimeout(()=>toast.classList.remove('show'),1700); };
+    document.querySelectorAll('[data-demo-action]').forEach(el => el.addEventListener('click', ()=>showToast(el.getAttribute('data-demo-action') || 'Action completed')));
+    document.querySelectorAll('[data-tab]').forEach(el => el.addEventListener('click', ()=>{ document.querySelectorAll('[data-tab]').forEach(x=>x.classList.remove('active')); el.classList.add('active'); showToast(`${el.textContent} view selected`); }));
+    document.querySelectorAll('[data-drawer-title]').forEach(el => el.addEventListener('click', ()=>{ if(!drawer || !drawerContent) return; drawerContent.innerHTML = `<div class="eyebrow">Growboard detail</div><h2 style="font-size:24px;margin:6px 0 12px">${el.getAttribute('data-drawer-title')}</h2><p class="muted" style="font-size:13px;line-height:1.6">This interactive prototype preserves the final navigation and drill-down pattern. Live production data will replace the synthetic provider without changing the user experience.</p><div class="notice" style="margin-top:16px">Demo data · no production write is performed.</div>`; drawer.classList.add('open'); }));
+    document.querySelector('[data-close-drawer]')?.addEventListener('click', ()=>drawer?.classList.remove('open'));
+  </script>
+</body>
+</html>
