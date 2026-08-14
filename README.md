@@ -10,7 +10,7 @@ Manufacturer-facing operating intelligence application for the CVAi thcgrowery p
 - selective Preact islands
 - static-first build suitable for Cloudflare Pages
 
-## Prototype state
+## State
 
 This public build uses coherent synthetic demonstration data. It is intentionally separated from the private `smavgs/thcgrowery` repository and does not contain customer credentials, raw facility evidence, private keys, or proprietary backend source.
 
