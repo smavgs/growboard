@@ -5,7 +5,8 @@ import { navigation } from '../data/navigation';
 const { title, eyebrow, activeRoute, tabs = [] } = Astro.props;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const hrefFor = (route:string) => route === 'overview' ? base : `${base}${route}/`;
-const shareImage = 'https://smavgs.github.io/growboard/assets/cvai-logo.webp';
+const shareImage = 'https://smavgs.github.io/growboard/assets/cvai-growboard-social.jpg';
+const shareImageAlt = 'CVAi Growboard — Manufacturer Operating Intelligence';
 const description = 'CVAi Growboard — manufacturer operating intelligence for cultivation operations, crop performance, facility health, interventions, KPIs and verified value.';
 ---
 <!doctype html>
@@ -20,10 +21,15 @@ const description = 'CVAi Growboard — manufacturer operating intelligence for 
   <meta property="og:title" content={`${title} · CVAi Growboard`} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={shareImage} />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={shareImageAlt} />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={`${title} · CVAi Growboard`} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={shareImage} />
+  <meta name="twitter:image:alt" content={shareImageAlt} />
   <link rel="icon" type="image/webp" href={`${base}assets/cvai-logo.webp`} />
   <link rel="apple-touch-icon" href={`${base}assets/cvai-logo.webp`} />
   <title>{title} · CVAi Growboard</title>
