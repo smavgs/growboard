@@ -1,24 +1,38 @@
 ---
 import '../styles/global.css';
+import '../styles/brand-refresh.css';
 import { navigation } from '../data/navigation';
 const { title, eyebrow, activeRoute, tabs = [] } = Astro.props;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const hrefFor = (route:string) => route === 'overview' ? base : `${base}${route}/`;
+const shareImage = 'https://smavgs.github.io/growboard/assets/cvai-logo.webp';
+const description = 'CVAi Growboard — manufacturer operating intelligence for cultivation operations, crop performance, facility health, interventions, KPIs and verified value.';
 ---
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
-  <meta name="description" content="CVAi Growboard manufacturer operating intelligence prototype" />
-  <meta name="theme-color" content="#6f4cff" />
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#ffffff" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CVAi Growboard" />
+  <meta property="og:title" content={`${title} · CVAi Growboard`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={shareImage} />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={`${title} · CVAi Growboard`} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={shareImage} />
+  <link rel="icon" type="image/webp" href={`${base}assets/cvai-logo.webp`} />
+  <link rel="apple-touch-icon" href={`${base}assets/cvai-logo.webp`} />
   <title>{title} · CVAi Growboard</title>
 </head>
-<body>
+<body data-base={base}>
   <div class="shell">
     <aside class="sidebar">
       <a class="brand" href={base}>
-        <div class="brand-mark">✦</div>
+        <img class="brand-logo" src={`${base}assets/cvai-logo.webp`} alt="CVAi" />
         <div><div class="brand-name">CVAi Growboard</div><div class="brand-sub">Manufacturer Intelligence</div></div>
       </a>
       {navigation.map(section => <div class="nav-section">
@@ -65,6 +79,13 @@ const hrefFor = (route:string) => route === 'overview' ? base : `${base}${route}
     document.querySelectorAll('[data-tab]').forEach(el => el.addEventListener('click', ()=>{ document.querySelectorAll('[data-tab]').forEach(x=>x.classList.remove('active')); el.classList.add('active'); showToast(`${el.textContent} view selected`); }));
     document.querySelectorAll('[data-drawer-title]').forEach(el => el.addEventListener('click', ()=>{ if(!drawer || !drawerContent) return; drawerContent.innerHTML = `<div class="eyebrow">Growboard detail</div><h2 style="font-size:24px;margin:6px 0 12px">${el.getAttribute('data-drawer-title')}</h2><p class="muted" style="font-size:13px;line-height:1.6">This interactive prototype preserves the final navigation and drill-down pattern. Live production data will replace the synthetic provider without changing the user experience.</p><div class="notice" style="margin-top:16px">Demo data · no production write is performed.</div>`; drawer.classList.add('open'); }));
     document.querySelector('[data-close-drawer]')?.addEventListener('click', ()=>drawer?.classList.remove('open'));
+    const assetBase = document.body.dataset.base || '/';
+    const cameraPositions = ['0% 0%','100% 0%','0% 100%','100% 100%'];
+    document.querySelectorAll('.camera').forEach((camera, index) => {
+      camera.classList.add('sprite');
+      camera.style.backgroundImage = `linear-gradient(0deg,rgba(3,7,18,.18),rgba(3,7,18,.02)),url('${assetBase}assets/camera-sprite.jpg')`;
+      camera.style.backgroundPosition = cameraPositions[index % cameraPositions.length];
+    });
   </script>
 </body>
 </html>
